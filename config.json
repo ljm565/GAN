@@ -11,9 +11,9 @@
 
 
     "base_path": "./",
-    "model_name": "VAE_MNIST_10epochs",
+    "model_name": "GAN_MNIST_200epochs",
     "data_name": "data1",
-    "loss_data_name": "VAE_MNIST_10epochs",
+    "loss_data_name": "GAN_MNIST_200epochs",
 
 
     "color_channel": 1,
@@ -25,18 +25,13 @@
 
 
     "batch_size": 128,
-    "epochs": 10,
-    "lr": 0.001,
-    "hidden_dim": 512,
-    "latent_dim": 10,
-    "dropout": 0,
+    "epochs": 200,
+    "lr": 0.0002,
+    "hidden_dim": 256,
+    "noise_init_size": 128,
 
-
-    "result_num": 10,
-    "result_img_name": "result.png",
-    "visualization_tsne": 1,
-    "visualization_tsne_img_name": "visualization.png",
-    "walking_latent_space": 1,
-    "walking_latent_space_img_name": "latent_space_changing.png",
-    "numbers": [3, 7]
+    "training_visualization": 1,
+    "generation_img_folder_name": "GAN_MNIST_200epochs",
+    "generation_gif_name": "generation_gif.gif",
+    "score_cal_folder_name": "GAN_MNIST_200epochs"
 }
