@@ -1,7 +1,7 @@
 # Generative Adversarial Network (GAN)
 ## 설명
 Generative Adversarial Network (GAN)는 새로운 데이터를 생성을 목표로하는 생성 모델입니다.
-variational autoencoder (VAE) 이후에 등장한 생성 모델이며, 생성하는 데 있어 현재 가장 많이 연구되고 사용되는 알고리즘 중 하나입니다. 본 코드에서는 vanilla GAN의 코드를 확인할 수 있으며, MNIST 데이터의 경우 GAN이 학습하면서 생성하는 순차적인 결과의 변화를 gif 형식의 파일로 가시화할 수 있습니다. 또한 학습된 모델이 생성한 데이터의 질을 확인하기 위하여 [Fréchet Inception Distance (FID) score](https://github.com/mseitzer/pytorch-fid)를 계산할 수 있습니다(출처: (https://github.com/mseitzer/pytorch-fid). GAN에 대한 설명은 [Generative Adversarial Network (GAN)](https://ljm565.github.io/contents/GAN1.html)를 참고하시기 바랍니다.
+variational autoencoder (VAE) 이후에 등장한 생성 모델이며, 생성하는 데 있어 현재 가장 많이 연구되고 사용되는 알고리즘 중 하나입니다. 본 코드에서는 vanilla GAN의 코드를 확인할 수 있으며, MNIST 데이터의 경우 GAN이 학습하면서 생성하는 순차적인 결과의 변화를 gif 형식의 파일로 가시화할 수 있습니다. 또한 학습된 모델이 생성한 데이터의 질을 확인하기 위하여 [Fréchet Inception Distance (FID) score](https://github.com/mseitzer/pytorch-fid)를 계산할 수 있습니다(출처: https://github.com/mseitzer/pytorch-fid). GAN에 대한 설명은 [Generative Adversarial Network (GAN)](https://ljm565.github.io/contents/GAN1.html)를 참고하시기 바랍니다.
 <br><br><br>
 
 ## 모델 종류
