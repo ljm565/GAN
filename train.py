@@ -4,14 +4,9 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
 import torchvision.datasets as dsets
 import torchvision.transforms as transforms
-from torchvision.utils import make_grid
 import time
 import pickle
 import math
-from sklearn.manifold import TSNE
-import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import os 
 
 from config import Config
