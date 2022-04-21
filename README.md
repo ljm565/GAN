@@ -102,6 +102,7 @@ variational autoencoder (VAE) 이후에 등장한 생성 모델이며, 생성하
 ## 결과
 * GAN 결과<br><br>
 <img src="images/generation_gif.gif" width="50%"><br><br>
+<img src="images/RealandFake.png" width="100%"><br><br>
 <br><br><br>
 
 
