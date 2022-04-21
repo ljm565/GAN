@@ -10,7 +10,7 @@ import math
 import os 
 
 from config import Config
-from utils_func import save_checkpoint, make_img_data, save_images, gif_making, generated_img_per_epochs, image_path
+from utils_func import *
 from utils_data import DLoader
 from model_GAN import Generator, Discriminator
 from pytorch_fid.fid_score import calculate_fid_given_paths
@@ -251,16 +251,18 @@ class Trainer:
 
 
     def test(self):
-        for real_data, _ in self.dataloaders['test']:
-            break
-
+        base_path, score_cal_folder_name = self.config.base_path, self.config.score_cal_folder_name
+        
+        real_data = next(iter(self.dataloaders['test']))[0]
         fake_data = self.G_model(self.fixed_test_noise)
 
-        real_path = image_path(self.config.base_path, self.config.score_cal_folder_name, real_data, True)
-        fake_path = image_path(self.config.base_path, self.config.score_cal_folder_name, fake_data, False)
+        real_path = image_path(base_path, score_cal_folder_name, real_data, True)
+        fake_path = image_path(base_path, score_cal_folder_name, fake_data, False)
 
         # calculate_fid_given_paths (paths, batch_size, device, dims)
         fid_value = calculate_fid_given_paths([real_path, fake_path], 50, self.device, 2048)
 
-        return fid_value
+        # draw real and fake images
+        draw(real_data, fake_data, base_path, score_cal_folder_name)
 
+        return fid_value

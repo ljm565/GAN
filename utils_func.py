@@ -57,3 +57,20 @@ def image_path(base_path, score_cal_folder_name, data, real):
         save_image(data[i], img_path)
 
     return folder_path
+
+
+def draw(real_data, fake_data, base_path, score_cal_folder_name):
+    # Plot the real images
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1,2,1)
+    plt.axis("off")
+    plt.title("Real Images")
+    plt.imshow(np.transpose(make_grid(real_data[:64], padding=5, normalize=True).cpu(), (1,2,0)))
+
+    # Plot the fake images from the last epoch
+    plt.subplot(1,2,2)
+    plt.axis("off")
+    plt.title("Fake Images")
+    plt.imshow(np.transpose(make_grid(fake_data[:64], padding=5, normalize=True).cpu(), (1,2,0)))
+
+    plt.savefig(base_path + 'test/' + score_cal_folder_name + '/RealandFake.png')
