@@ -231,8 +231,6 @@ class Trainer:
                         format(phase, D_epoch_loss, G_epoch_loss, Dx, D_G1))
                     val_loss_history['discriminator'].append(D_epoch_loss)
                     val_loss_history['generator'].append(G_epoch_loss)
-
-                    print('model pt file is being saved\n')
                     model_dic = {'discriminator': self.D_model.state_dict(), 'generator': self.G_model.state_dict()}
                     optimizer_dic = {'discriminator': self.D_optimizer.state_dict(), 'generator': self.G_optimizer.state_dict()}
                     save_checkpoint(self.model_path, model_dic, optimizer_dic)

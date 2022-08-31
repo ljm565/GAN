@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 def save_checkpoint(file, model_dic, optimizer_dic):
     state = {'model': model_dic, 'optimizer': optimizer_dic}
     torch.save(state, file)
+    print('model pt file is being saved\n')
 
 
 def make_img_data(path, trans):
