@@ -105,8 +105,3 @@ variational autoencoder (VAE) 이후에 등장한 생성 모델이며, 생성하
 <img src="images/RealandFake.png" width="100%"><br><br>
 <br><br><br>
 
-
-## License
-© 2022. Jun-Min Lee. All rights reserved.<br>
-ljm56897@gmail.com, ljm565@kaist.ac.kr, ljm565@naver.com
-
