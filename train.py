@@ -8,6 +8,7 @@ import time
 import pickle
 import math
 import os 
+import sys
 
 from config import Config
 from utils_func import *
@@ -99,7 +100,7 @@ class Trainer:
                         self.valset, self.testset = random_split(data2, [self.val_len, self.test_len], generator=torch.Generator().manual_seed(999))
                     else:
                         print("two folders must be ['train', 'val] or ['val', 'test']")
-                        raise AssertionError
+                        sys.exit()
 
                 elif len(self.custom_data_proportion) == 1:
                     self.trainset = make_img_data(self.config.train_data_path, self.trans)
