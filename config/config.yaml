@@ -1,0 +1,37 @@
+# base
+seed: 0
+deterministic: True
+
+# environment config
+device: cpu     # examples: [0], [0,1], [1,2,3], cpu... 
+
+# project config
+project: outputs/GAN
+name: MNIST
+
+# image setting config
+height: 28
+width: 28
+color_channel: 1
+convert2grayscale: False
+
+# data config
+workers: 0              # Don't worry to set worker. The number of workers will be set automatically according to the batch size.
+MNIST_train: True       # if True, MNIST will be loaded automatically.
+MNIST:
+    path: data/
+    MNIST_valset_proportion: 0.2      # MNIST has only train and test data. Thus, part of the training data is used as a validation set.
+CUSTOM:
+    train_data_path: null
+    validation_data_path: null
+    test_data_path: null
+
+# train config
+batch_size: 128
+epochs: 200
+lr: 0.0002
+hidden_dim: 256
+noise_init_size: 128
+
+# logging config
+common: ['train_loss_d', 'train_loss_g', 'validation_loss_d', 'validation_loss_g', 'd_x', 'd_g1', 'd_g2']

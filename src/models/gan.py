@@ -1,16 +1,15 @@
 import torch.nn as nn
-from config import Config
 
 
 
 class Generator(nn.Module):
-    def __init__(self, config:Config, color_channel:int):
+    def __init__(self, config):
         super(Generator, self).__init__()
         self.height = config.height
         self.width = config.width
         self.hidden_dim = config.hidden_dim
         self.noise_init_size = config.noise_init_size
-        self.color_channel = color_channel
+        self.color_channel = config.color_channel
 
         self.generator = nn.Sequential(
             nn.Linear(self.noise_init_size, self.hidden_dim),
@@ -31,12 +30,12 @@ class Generator(nn.Module):
 
 
 class Discriminator(nn.Module):
-    def __init__(self, config:Config, color_channel:int):
+    def __init__(self, config):
         super(Discriminator, self).__init__()
         self.height = config.height
         self.width = config.width
         self.hidden_dim = config.hidden_dim
-        self.color_channel = color_channel
+        self.color_channel = config.color_channel
 
         self.discriminator = nn.Sequential(
             nn.Linear(self.width*self.height*self.color_channel, self.hidden_dim),

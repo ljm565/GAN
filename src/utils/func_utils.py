@@ -3,34 +3,15 @@ from torchvision.utils import make_grid, save_image
 import os
 from PIL import Image
 from tqdm import tqdm
-import numpy as np
-import imageio
+
 import matplotlib.pyplot as plt
 
 
-def save_checkpoint(file, model_dic, optimizer_dic):
-    state = {'model': model_dic, 'optimizer': optimizer_dic}
-    torch.save(state, file)
-    print('model pt file is being saved\n')
 
 
-def make_img_data(path, trans):
-    files = os.listdir(path)
-    data = [trans(Image.open(path+file)) for file in tqdm(files) if not file.startswith('.')]
-    return data
 
 
-def save_images(fake_output, fake_list):
-    fake_output = fake_output.detach().cpu()
-    img = make_grid(fake_output, nrow=8).numpy()
-    img = np.transpose(img, (1,2,0))
-    fake_list.append(img)
-    return fake_list
 
-
-def gif_making(base_path, fake_list, generation_gif_name):
-    gif_list = [(data/data.max()*255).astype(np.uint8) for data in fake_list]
-    imageio.mimsave(base_path+'result/'+generation_gif_name, gif_list)
 
 
 def generated_img_per_epochs(base_path, fake_list, generation_img_folder_name):
