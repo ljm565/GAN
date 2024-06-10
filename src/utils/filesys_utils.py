@@ -2,6 +2,7 @@ import os
 import imageio
 import numpy as np
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 from torchvision.utils import make_grid
 
@@ -56,7 +57,7 @@ def yaml_save(file='data.yaml', data=None, header=''):
         LOGGER.info(f"Config is saved at {save_path}")
 
 
-def save_images(fake_output, fake_list):
+def append_fake_images(fake_output, fake_list):
     fake_output = fake_output.detach().cpu()
     img = make_grid(fake_output, nrow=8).numpy()
     img = np.transpose(img, (1,2,0))
@@ -64,6 +65,17 @@ def save_images(fake_output, fake_list):
     return fake_list
 
 
-def gif_making(base_path, fake_list, generation_gif_name):
+def gif_making(save_path, fake_list):
     gif_list = [(data/data.max()*255).astype(np.uint8) for data in fake_list]
-    imageio.mimsave(base_path+'result/'+generation_gif_name, gif_list)
+    imageio.mimsave(save_path, gif_list)
+
+
+def generated_img_per_epochs(save_path, fake_list):
+    os.makedirs(save_path, exist_ok=True)
+    
+    for idx, img in enumerate(fake_list):
+        if (idx+1) % 10 == 0 or idx == 0 or idx+1 == len(fake_list):
+            i = '0'*(3-len(str(idx)))+str(idx+1)
+            plt.figure(figsize=(10, 10))
+            plt.imshow(img, interpolation='nearest')
+            plt.savefig(os.path.join(save_path, f'{i}_epoch_img.jpg'))

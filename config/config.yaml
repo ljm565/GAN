@@ -3,7 +3,7 @@ seed: 0
 deterministic: True
 
 # environment config
-device: cpu     # examples: [0], [0,1], [1,2,3], cpu... 
+device: [0]     # examples: [0], [0,1], [1,2,3], cpu... 
 
 # project config
 project: outputs/GAN
@@ -28,7 +28,7 @@ CUSTOM:
 
 # train config
 batch_size: 128
-epochs: 200
+epochs: 300
 lr: 0.0002
 hidden_dim: 256
 noise_init_size: 128

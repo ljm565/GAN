@@ -59,7 +59,7 @@ class TrainingLogger:
         if phase == 'train':
             train_epoch_result = {}
             for k, v in self.log_data.items():
-                if all([e != None for e in v]):
+                if k not in ['step', 'epoch'] and all([e != None for e in v]):
                     # nan value processing
                     value_sum, reduce_batch_sizes = self.nan_value_filtering(v[self.st:], self.train_batch_sizes)
                     train_epoch_result[k] = value_sum / (sum(self.train_batch_sizes) - reduce_batch_sizes)

@@ -110,6 +110,7 @@ class Trainer:
 
 
     def do_train(self):
+        fake_list = []
         self.train_cur_step = -1
         self.train_time_start = time.time()
         
@@ -141,9 +142,9 @@ class Trainer:
                     if self.is_ddp:
                         dist.barrier()
             
-            # save generated fake images
+            # take generated fake images
             fake_imgs = self.generator(self.fixed_test_noise)
-            fake_list = save_images(fake_imgs, fake_list)
+            fake_list = append_fake_images(fake_imgs, fake_list)
 
             # clears GPU vRAM at end of epoch, can help with out of memory errors
             torch.cuda.empty_cache()
@@ -153,6 +154,12 @@ class Trainer:
                 LOGGER.info(f"\nepoch {epoch+1} time: {time.time() - start} s\n\n\n")
 
         if RANK in (-1, 0) and self.is_rank_zero:
+            LOGGER.info(colorstr('Saving the generated images related data...\n'))
+            visoutput_path = self.save_dir / 'vis_outputs'
+            os.makedirs(visoutput_path, exist_ok=True)
+            gif_making(visoutput_path / 'training.gif', fake_list)
+            generated_img_per_epochs(visoutput_path / 'generated_images', fake_list)
+
             LOGGER.info(f'\n{epoch + 1} epochs completed in '
                         f'{(time.time() - self.train_time_start) / 3600:.3f} hours.')
             
@@ -220,7 +227,7 @@ class Trainer:
                     epoch + 1,
                     self.train_cur_step,
                     batch_size, 
-                    **{'validation_loss_d': d_loss.item(), 'validation_loss_g': g_loss.item()},
+                    **{'train_loss_d': d_loss.item(), 'train_loss_g': g_loss.item()},
                     **{'d_x': d_x.item(), 'd_g1': d_g1.item(), 'd_g2': d_g2.item()}
                 )
                 loss_log = [d_loss.item(), g_loss.item(), d_x.item(), d_g1.item(), d_g2.item()]
@@ -285,7 +292,7 @@ class Trainer:
                         epoch, 
                         self.train_cur_step if is_training_now else 0, 
                         batch_size, 
-                        **{'train_loss_d': d_loss.item(), 'train_loss_g': g_loss.item()},
+                        **{'validation_loss_d': d_loss.item(), 'validation_loss_g': g_loss.item()},
                         **{'d_x': d_x.item(), 'd_g1': d_g1.item(), 'd_g2': d_g2.item()}
                     )
 

@@ -14,16 +14,6 @@ import matplotlib.pyplot as plt
 
 
 
-def generated_img_per_epochs(base_path, fake_list, generation_img_folder_name):
-    folder_path = base_path+'result/'+generation_img_folder_name+'/'
-    os.makedirs(folder_path, exist_ok=True)
-    
-    for idx, img in enumerate(fake_list):
-        if (idx+1) % 10 == 0 or idx == 0 or idx+1 == len(fake_list):
-            i = '0'*(3-len(str(idx)))+str(idx+1)
-            plt.figure(figsize=(10, 10))
-            plt.imshow(img, interpolation='nearest')
-            plt.savefig(folder_path+i+'_epoch_img.jpg')
 
 
 def image_path(base_path, score_cal_folder_name, data, real):
