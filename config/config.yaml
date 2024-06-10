@@ -3,7 +3,7 @@ seed: 0
 deterministic: True
 
 # environment config
-device: [0]     # examples: [0], [0,1], [1,2,3], cpu... 
+device: cpu     # examples: [0], [0,1], [1,2,3], cpu... 
 
 # project config
 project: outputs/GAN
