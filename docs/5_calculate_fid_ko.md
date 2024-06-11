@@ -12,7 +12,7 @@
 
 
 #### 1.2 Command
-`src/run/tsne_test.py` 파일로 다음과 같은 명령어를 통해 학습된 모델의 FID score를 계산합니다.
+`src/run/cal_fid.py` 파일로 다음과 같은 명령어를 통해 학습된 모델의 FID score를 계산합니다.
 ```bash
-python3 src/run/tsne_test.py --resume_model_dir {$project}/{$name}
+python3 src/run/cal_fid.py --resume_model_dir {$project}/{$name}
 ```
