@@ -13,7 +13,7 @@ import torch.optim as optim
 from torch import distributed as dist
 from torchvision.utils import make_grid
 
-from tools import TrainingLogger
+from tools import TrainingLogger, calculate_fid_given_paths
 from trainer.build import get_model, get_data_loader
 from utils import TQDM, RANK, LOGGER, colorstr, init_seeds
 from utils.filesys_utils import *
@@ -310,111 +310,22 @@ class Trainer:
                     self.training_logger.save_logs(self.save_dir)
         
 
-    def test(self, phase, result_num):
-        if result_num > len(self.dataloaders[phase].dataset):
-            LOGGER.info(colorstr('red', 'The number of results that you want to see are larger than total test set'))
-            sys.exit()
+    def cal_fid(self, phase):
+        visoutput_path = os.path.join(self.config.save_dir, 'vis_outputs')
 
-        # makd directory
-        vis_save_dir = os.path.join(self.config.save_dir, 'vis_outputs') 
-        os.makedirs(vis_save_dir, exist_ok=True)
+        real_data = next(iter(self.dataloaders[phase]))[0]
+        fake_data = self.generator(self.fixed_test_noise)
+
+        real_path = os.path.join(visoutput_path, 'fid/real_images')
+        fake_path = os.path.join(visoutput_path, 'fid/fake_images')
         
-        # concatenate all testset for t-sne and results
-        with torch.no_grad():
-            total_x, total_output, total_mu, total_log_var, total_y = [], [], [], [], []
-            test_loss = 0
-            self.model.eval()
-            for x, y in self.dataloaders[phase]:
-                x = x.to(self.device)
-                output, mu, log_var = self.model(x)
-                test_loss +=  vae_loss(x, output, mu, log_var, self.decoder_loss).item()
-                
-                total_x.append(x.detach().cpu())
-                total_output.append(output.detach().cpu())
-                total_mu.append(mu.detach().cpu())
-                total_log_var.append(log_var.detach().cpu())
-                total_y.append(y.detach().cpu())
+        prepare_images(real_path, real_data)
+        prepare_images(fake_path, fake_data)
 
-            total_x = torch.cat(tuple(total_x), dim=0)
-            total_output = torch.cat(tuple(total_output), dim=0)
-            total_mu = torch.cat(tuple(total_mu), dim=0)
-            total_log_var = torch.cat(tuple(total_log_var), dim=0)
-            total_y = torch.cat(tuple(total_y), dim=0)
+        # calculate_fid_given_paths (paths, batch_size, device, dims)
+        fid_value = calculate_fid_given_paths([real_path, fake_path], 50, self.device, 2048)
 
-        total_output = total_output.view(total_output.size(0), -1, self.config.height, self.config.width)
-        total_mu = total_mu.view(total_mu.size(0), -1)
-        total_log_var = total_log_var.view(total_log_var.size(0), -1)
-        total_y = total_y.numpy()
-        z = make_z(total_mu.numpy(), total_log_var.numpy())
-        LOGGER.info(colorstr('green', f'testset loss: {test_loss/len(self.dataloaders[phase].dataset)}'))
+        # draw real and fake images
+        draw(real_data, fake_data, os.path.join(visoutput_path, 'fid/fid.png'))
 
-        # select random index of the data
-        ids = set()
-        while len(ids) != result_num:
-            ids.add(random.randrange(len(total_output)))
-        ids = list(ids)
-
-        # save the result img 
-        LOGGER.info('start result drawing')
-        k = 0
-        plt.figure(figsize=(7, 3*result_num))
-        for id in ids:
-            orig = total_x[id].squeeze(0) if self.color_channel == 1 else total_x[id].permute(1, 2, 0)
-            out = total_output[id].squeeze(0) if self.color_channel == 1 else total_output[id].permute(1, 2, 0)
-            plt.subplot(result_num, 2, 1+k)
-            plt.imshow(orig, cmap='gray')
-            plt.subplot(result_num, 2, 2+k)
-            plt.imshow(out, cmap='gray')
-            k += 2
-        plt.savefig(os.path.join(vis_save_dir, 'vae_result.png'))
-
-        # t-sne visualization
-        if not self.config.MNIST_train:
-            LOGGER.info(colorstr('red', 'Now visualization is possible only for MNIST dataset. You can revise the code for your own dataset and its label..'))
-            sys.exit()
-
-        # latent variable visualization
-        LOGGER.info('start visualizing the latent space')
-        np.random.seed(42)
-        tsne = TSNE()
-
-        x_test_2D = tsne.fit_transform(z)
-        x_test_2D = (x_test_2D - x_test_2D.min())/(x_test_2D.max() - x_test_2D.min())
-
-        plt.figure(figsize=(10, 10))
-        plt.scatter(x_test_2D[:, 0], x_test_2D[:, 1], s=10, cmap='tab10', c=total_y)
-        cmap = plt.cm.tab10
-        image_positions = np.array([[1., 1.]])
-        for index, position in enumerate(x_test_2D):
-            dist = np.sum((position - image_positions) ** 2, axis=1)
-            if np.min(dist) > 0.02: # if far enough from other images
-                image_positions = np.r_[image_positions, [position]]
-                imagebox = mpl.offsetbox.AnnotationBbox(
-                    mpl.offsetbox.OffsetImage(torch.squeeze(total_x).cpu().numpy()[index], cmap='binary'),
-                    position, bboxprops={'edgecolor': cmap(total_y[index]), 'lw': 2})
-                plt.gca().add_artist(imagebox)
-        plt.axis('off')
-        plt.savefig(os.path.join(vis_save_dir, 'tsne_result.png'))
-    
-        # latent space chaning visualization
-        z_mean, interp = [], []
-        numbers = self.config.numbers
-
-        for i in range(10):
-            loc = np.where(total_y == i)[0]
-            z_mean.append(np.mean(z[loc], axis=0))
-
-        z1, z2 = z_mean[numbers[0]], z_mean[numbers[1]]
-
-        with torch.no_grad():
-            for coef in (np.linspace(0, 1, 10)):
-                interp.append((1 - coef)*z1 + coef*z2)
-            z = torch.from_numpy(np.array(interp)).to(self.device)
-            output = self.model.decoder(z)
-
-        output = output.view(10, 1, 28, 28).detach().cpu()
-        img = make_grid(output, nrow=10).numpy()
-        plt.figure(figsize=(30, 7))
-        plt.imshow(np.transpose(img, (1, 2, 0)), interpolation='nearest')
-        plt.savefig(os.path.join(vis_save_dir, 'latent_space_changing.png'))
-
+        return fid_value

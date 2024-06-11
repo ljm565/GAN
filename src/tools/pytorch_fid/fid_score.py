@@ -32,8 +32,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import os
+import sys
 import pathlib
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import numpy as np
 import torch

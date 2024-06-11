@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 import matplotlib.pyplot as plt
 
-from torchvision.utils import make_grid
+from torchvision.utils import make_grid, save_image
 
 from utils import LOGGER, colorstr
 
@@ -79,3 +79,27 @@ def generated_img_per_epochs(save_path, fake_list):
             plt.figure(figsize=(10, 10))
             plt.imshow(img, interpolation='nearest')
             plt.savefig(os.path.join(save_path, f'{i}_epoch_img.jpg'))
+
+
+def prepare_images(folder_dir, data):
+    os.makedirs(folder_dir, exist_ok=True)
+    
+    for i, img in enumerate(data):
+        save_image(img, os.path.join(folder_dir, f'img_{i}.png'))
+    
+
+def draw(real_data, fake_data, path):
+    # Plot the real images
+    plt.figure(figsize=(10, 5))
+    plt.subplot(1,2,1)
+    plt.axis("off")
+    plt.title("Real Images")
+    plt.imshow(np.transpose(make_grid(real_data[:64], padding=5, normalize=True).cpu(), (1,2,0)))
+
+    # Plot the fake images from the last epoch
+    plt.subplot(1,2,2)
+    plt.axis("off")
+    plt.title("Fake Images")
+    plt.imshow(np.transpose(make_grid(fake_data[:64], padding=5, normalize=True).cpu(), (1,2,0)))
+
+    plt.savefig(path)

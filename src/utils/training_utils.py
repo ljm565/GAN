@@ -25,18 +25,3 @@ def choose_proper_resume_model(resume_dir, type):
     except IndexError:
         raise IndexError(f"There's no model path in {weights_dir} of type {type}")
     
-
-def vae_loss(x, output, mu, log_var, decoder_loss):
-    batch_size = x.size(0)
-    x = x.view(batch_size, -1)
-
-    BCE_loss = decoder_loss(output, x)
-    KLD_loss = 0.5 * torch.sum((torch.square(mu) + torch.exp(log_var) - log_var - 1))
-
-    return BCE_loss + KLD_loss
-
-
-def make_z(mu, log_var):
-    std = np.exp(0.5 * log_var)
-    eps = torch.randn_like(torch.Tensor(std))
-    return mu + std*eps.numpy()
