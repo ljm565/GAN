@@ -77,6 +77,7 @@ def generated_img_per_epochs(save_path, fake_list):
         if (idx+1) % 10 == 0 or idx == 0 or idx+1 == len(fake_list):
             i = '0'*(3-len(str(idx)))+str(idx+1)
             plt.figure(figsize=(10, 10))
+            plt.tight_layout()
             plt.imshow(img, interpolation='nearest')
             plt.savefig(os.path.join(save_path, f'{i}_epoch_img.jpg'))
 
@@ -101,5 +102,6 @@ def draw(real_data, fake_data, path):
     plt.axis("off")
     plt.title("Fake Images")
     plt.imshow(np.transpose(make_grid(fake_data[:64], padding=5, normalize=True).cpu(), (1,2,0)))
-
+    
+    plt.tight_layout()
     plt.savefig(path)
