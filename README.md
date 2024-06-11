@@ -35,7 +35,7 @@ This repository is structured as follows.
 │
 └── src      
     ├── models
-    |   └── gan.py                  <- VAE model file
+    |   └── gan.py                  <- GAN model file
     |
     ├── run                   
     |   ├── cal_fid.py              <- Codes for calculating FID score
@@ -64,7 +64,6 @@ This repository is structured as follows.
 
 ## Tutorials & Documentations
 Please follow the steps below to train the GAN.
-
 1. [Getting Started](./docs/1_getting_started.md)
 2. [Data Preparation](./docs/2_data_preparation.md)
 3. [Training](./docs/3_trainig.md)
