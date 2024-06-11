@@ -1,21 +1,14 @@
 import gc
-import sys
 import time
-import random
-import numpy as np
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from sklearn.manifold import TSNE
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch import distributed as dist
-from torchvision.utils import make_grid
 
 from tools import TrainingLogger, calculate_fid_given_paths
 from trainer.build import get_model, get_data_loader
-from utils import TQDM, RANK, LOGGER, colorstr, init_seeds
+from utils import RANK, LOGGER, colorstr, init_seeds
 from utils.filesys_utils import *
 from utils.training_utils import *
 

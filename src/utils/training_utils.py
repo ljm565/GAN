@@ -1,7 +1,4 @@
 import os
-import numpy as np
-
-import torch
 
 from utils import LOGGER, TQDM
 
