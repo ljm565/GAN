@@ -326,6 +326,6 @@ class Trainer:
         fid_value = calculate_fid_given_paths([real_path, fake_path], 50, self.device, 2048)
 
         # draw real and fake images
-        draw(real_data, fake_data, os.path.join(visoutput_path, 'fid/fid.png'))
+        draw(real_data, fake_data, os.path.join(visoutput_path, 'fid/RealAndFake.png'))
 
         return fid_value
