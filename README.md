@@ -55,7 +55,7 @@ This repository is structured as follows.
     |   └── trainer.py              <- Class for training, evaluating, and visualizing with t-SNE
     |
     └── uitls                   
-        ├── __init__.py             <- File for initializing the logger, versioning, etc.
+        ├── __init__.py             <- Class for training, evaluating, and FID calculation
         ├── data_utils.py           <- File defining the custom dataset dataloader
         ├── filesys_utils.py       
         └── training_utils.py     
