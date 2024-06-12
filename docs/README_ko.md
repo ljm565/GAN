@@ -47,7 +47,7 @@ python3 src/run/train.py --config config/config.yaml --mode train
     |
     ├── trainer                 
     |   ├── build.py                <- Dataset, dataloader 등을 정의하는 파일
-    |   └── trainer.py              <- 학습, 평가, t-SNE 가시화 수행 class 파일with t-SNE
+    |   └── trainer.py              <- 학습, 평가, FID score 계산 class 파일
     |
     └── uitls                   
         ├── __init__.py             <- Logger, 버전 등을 초기화 하는 파일
