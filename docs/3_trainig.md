@@ -2,7 +2,7 @@
 Here, we provide guides for training a GAN model.
 
 ### 1. Configuration Preparation
-To train an GAN model, you need to create a configuration.
+To train a GAN model, you need to create a configuration.
 Detailed descriptions and examples of the configuration options are as follows.
 
 ```yaml
