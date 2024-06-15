@@ -16,6 +16,10 @@ variational autoencoder (VAE) 이후에 등장한 생성 모델이며, 생성하
 다만 `src/utils/data_utils.py`에 custom dataloader 코드를 구현해야할 수도 있습니다.
 <br><br><br>
 
+## Supported Devices
+* CPU, GPU, multi-GPU (DDP), MPS (for Mac and torch>=1.12.0)
+<br><br><br>
+
 ## Quick Start
 ```bash
 python3 src/run/train.py --config config/config.yaml --mode train

@@ -75,7 +75,11 @@ class Trainer:
 
     def _init_model(self, config, mode):
         def _resume_model(resume_path, device, is_rank_zero):
-            checkpoints = torch.load(resume_path, map_location=device)
+            try:
+                checkpoints = torch.load(resume_path, map_location=device)
+            except RuntimeError:
+                LOGGER.warning(colorstr('yellow', 'cannot be loaded to MPS, loaded to CPU'))
+                checkpoints = torch.load(resume_path, map_location=torch.device('cpu'))
             generator.load_state_dict(checkpoints['model']['generator'])
             discriminator.load_state_dict(checkpoints['model']['discriminator'])
             del checkpoints
@@ -86,12 +90,11 @@ class Trainer:
             return generator, discriminator
 
         # init model and tokenizer
-        resume_success = False
         do_resume = mode == 'resume' or (mode == 'validation' and self.resume_path)
         generator, discriminator = get_model(config, self.device)
 
         # resume model or resume model after applying peft
-        if do_resume and not resume_success:
+        if do_resume:
             generator, discriminator = _resume_model(self.resume_path, self.device, config.is_rank_zero)
 
         # init ddp
