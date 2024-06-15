@@ -55,7 +55,7 @@ This repository is structured as follows.
     |   └── trainer.py              <- Class for training, evaluating, and calculating FID score
     |
     └── uitls                   
-        ├── __init__.py             <- Class for training, evaluating, and FID calculation
+        ├── __init__.py             <- File for initializing the logger, versioning, etc.
         ├── data_utils.py           <- File defining the custom dataset dataloader
         ├── filesys_utils.py       
         └── training_utils.py     
