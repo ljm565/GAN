@@ -52,7 +52,7 @@ This repository is structured as follows.
     |
     ├── trainer                 
     |   ├── build.py                <- Codes for initializing dataset, dataloader, etc.
-    |   └── trainer.py              <- Class for training, evaluating, and visualizing with t-SNE
+    |   └── trainer.py              <- Class for training, evaluating, and calculating FID score
     |
     └── uitls                   
         ├── __init__.py             <- Class for training, evaluating, and FID calculation
