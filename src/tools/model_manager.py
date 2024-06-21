@@ -4,7 +4,6 @@ import torch
 class ModelManager:
     def __init__(self):
         self.is_init = True
-        self.best_lower = None
         self.lower_candidates_weights = {
             'validation_loss_d': 0.2,
             'validation_loss_g': 0.8,
