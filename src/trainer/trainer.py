@@ -93,7 +93,7 @@ class Trainer:
         do_resume = mode == 'resume' or (mode == 'validation' and self.resume_path)
         generator, discriminator = get_model(config, self.device)
 
-        # resume model or resume model after applying peft
+        # resume model
         if do_resume:
             generator, discriminator = _resume_model(self.resume_path, self.device, config.is_rank_zero)
 
